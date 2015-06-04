@@ -57,8 +57,7 @@ class PlaySoundsViewController: UIViewController {
     }
     
     @IBAction func touchUpStopButton(sender: UIButton) {
-        self.audioPlayer.stop()
-        self.audioPlayer.currentTime = 0
+        self.resetAudio()
     }
     
     // MARK: - Audio Controls
