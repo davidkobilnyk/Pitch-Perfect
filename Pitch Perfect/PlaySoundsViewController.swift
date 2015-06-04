@@ -41,19 +41,19 @@ class PlaySoundsViewController: UIViewController {
     // MARK: - UI Events
 
     @IBAction func touchUpSlowButton(sender: AnyObject) {
-        self.playAudio(0.5)
+        self.playAudio(rate: 0.5)
     }
     
     @IBAction func touchUpFastButton(sender: UIButton) {
-        self.playAudio(2.0)
+        self.playAudio(rate: 2.0)
     }
     
     @IBAction func touchUpChipmunkButton(sender: UIButton) {
-        self.playAudioWithVariablePitch(1000)
+        self.playAudio(pitch: 1000)
     }
     
     @IBAction func touchUpDarthVaderButton(sender: UIButton) {
-        self.playAudioWithVariablePitch(-1000)
+        self.playAudio(pitch: -1000)
     }
     
     @IBAction func touchUpStopButton(sender: UIButton) {
@@ -62,13 +62,13 @@ class PlaySoundsViewController: UIViewController {
     
     // MARK: - Audio Controls
     
-    func playAudio(rate: Float) {
+    func playAudio(#rate: Float) {
         self.resetAudio()
         self.audioPlayer.rate = rate
         self.audioPlayer.play()
     }
     
-    func playAudioWithVariablePitch(pitch: Float){
+    func playAudio(#pitch: Float){
         self.resetAudio()
         
         var audioPlayerNode = AVAudioPlayerNode()
