@@ -33,7 +33,7 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.setUIModeToInitial()
+        setUIModeToInitial()
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,36 +53,36 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     // MARK: - UI Events
 
     @IBAction func touchUpRecordButton(sender: UIButton) {
-        self.setUIModeToRecord()
-        self.startRecording()
+        setUIModeToRecord()
+        startRecording()
     }
 
     @IBAction func touchUpPauseButton(sender: UIButton) {
-        self.setUIModeToPause()
-        self.pauseRecording()
+        setUIModeToPause()
+        pauseRecording()
     }
 
     @IBAction func touchUpResumeButton(sender: UIButton) {
-        self.setUIModeToRecord()
-        self.resumeRecording()
+        setUIModeToRecord()
+        resumeRecording()
     }
 
     @IBAction func touchUpStopButton(sender: UIButton) {
-        self.setUIModeToInitial()
-        self.stopRecording()
+        setUIModeToInitial()
+        stopRecording()
     }
 
     // MARK: - AVAudioRecorderDelegate
 
     func audioRecorderDidFinishRecording(recorder: AVAudioRecorder!, successfully flag: Bool) {
         if (!flag) {
-            self.recordingLabel.text = "Record Failed. Tap to Re-Attempt Record"
+            recordingLabel.text = "Record Failed. Tap to Re-Attempt Record"
             println("Recording was not successful")
             return
         }
 
-        self.recordedAudio = RecordedAudio(filePathUrl: recorder.url, title: recorder.url.lastPathComponent)
-        self.performSegueWithIdentifier("stopRecording", sender: recordedAudio)
+        recordedAudio = RecordedAudio(filePathUrl: recorder.url, title: recorder.url.lastPathComponent)
+        performSegueWithIdentifier("stopRecording", sender: recordedAudio)
     }
 
     // MARK: - Audio Control
@@ -111,11 +111,11 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     }
 
     func pauseRecording() {
-        self.audioRecorder.pause()
+        audioRecorder.pause()
     }
 
     func resumeRecording() {
-        self.audioRecorder.record()
+        audioRecorder.record()
     }
 
     func stopRecording() {
@@ -128,27 +128,27 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     // MARK: - View Model
 
     func setUIModeToInitial() {
-        self.recordButton.enabled = true
-        self.recordingLabel.text = "Tap to Record"
-        self.pauseButton.hidden = true
-        self.resumeButton.hidden = true
-        self.stopButton.hidden = true
+        recordButton.enabled = true
+        recordingLabel.text = "Tap to Record"
+        pauseButton.hidden = true
+        resumeButton.hidden = true
+        stopButton.hidden = true
     }
 
     func setUIModeToRecord() {
-        self.recordButton.enabled = false
-        self.recordingLabel.text = "Recording"
-        self.pauseButton.hidden = false
-        self.resumeButton.hidden = true
-        self.stopButton.hidden = false
+        recordButton.enabled = false
+        recordingLabel.text = "Recording"
+        pauseButton.hidden = false
+        resumeButton.hidden = true
+        stopButton.hidden = false
     }
 
     func setUIModeToPause() {
-        self.recordButton.enabled = false
-        self.recordingLabel.text = "Paused"
-        self.pauseButton.hidden = true
-        self.resumeButton.hidden = false
-        self.stopButton.hidden = false
+        recordButton.enabled = false
+        recordingLabel.text = "Paused"
+        pauseButton.hidden = true
+        resumeButton.hidden = false
+        stopButton.hidden = false
     }
 }
 
