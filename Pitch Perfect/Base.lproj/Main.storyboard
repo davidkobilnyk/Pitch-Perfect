@@ -3,6 +3,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--Record-->
@@ -33,7 +34,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SsJ-ue-oGP" userLabel="Pause Button">
-                                <rect key="frame" x="280" y="417" width="40" height="40"/>
+                                <rect key="frame" x="280" y="440" width="40" height="40"/>
                                 <state key="normal" image="Pause">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -42,7 +43,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oBA-3o-OnY" userLabel="Resume Button">
-                                <rect key="frame" x="280" y="417" width="40" height="40"/>
+                                <rect key="frame" x="280" y="440" width="40" height="40"/>
                                 <state key="normal" image="Resume">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -51,7 +52,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d4v-13-xAP" userLabel="Stop Button">
-                                <rect key="frame" x="275" y="500" width="50" height="50"/>
+                                <rect key="frame" x="275" y="507" width="50" height="50"/>
                                 <state key="normal" image="Stop">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -63,13 +64,13 @@
                         <color key="backgroundColor" red="0.14509804546833038" green="0.69803923368453979" blue="0.16078431904315948" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
                             <constraint firstItem="oBA-3o-OnY" firstAttribute="centerY" secondItem="SsJ-ue-oGP" secondAttribute="centerY" id="5jH-nj-3cg" userLabel="Resume Button Aligned to Pause Button Vertically"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="SsJ-ue-oGP" secondAttribute="bottom" multiplier="5:4" id="8rl-8b-8nJ" userLabel="Pause Button Above Bottom Edge"/>
                             <constraint firstAttribute="centerY" secondItem="KMp-SV-qnY" secondAttribute="centerY" id="BAS-My-qJw" userLabel="Record Button Centered Vertically"/>
                             <constraint firstAttribute="centerX" secondItem="Wmy-l0-IWn" secondAttribute="centerX" id="JXq-sr-Qj3" userLabel="Recording Label Centered Horizontally"/>
                             <constraint firstAttribute="centerX" secondItem="SsJ-ue-oGP" secondAttribute="centerX" id="M2j-s6-FJ3" userLabel="Pause Button Centered Horizontally"/>
                             <constraint firstItem="Wmy-l0-IWn" firstAttribute="top" secondItem="KMp-SV-qnY" secondAttribute="bottom" constant="8" id="POm-TU-Bxb" userLabel="Recording Label Below Record Button"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="d4v-13-xAP" secondAttribute="bottom" constant="50" id="Si4-r8-D2f" userLabel="Stop Button to Bottom Edge"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="d4v-13-xAP" secondAttribute="bottom" multiplier="14:13" id="Si4-r8-D2f" userLabel="Stop Button Above Bottom Edge"/>
                             <constraint firstAttribute="centerX" secondItem="d4v-13-xAP" secondAttribute="centerX" id="Xxz-K5-BQj" userLabel="Stop Button Centered Horizontally"/>
-                            <constraint firstItem="SsJ-ue-oGP" firstAttribute="top" secondItem="Wmy-l0-IWn" secondAttribute="bottom" constant="45" id="xGA-x5-api" userLabel="Pause Button below Recording Label"/>
                             <constraint firstItem="oBA-3o-OnY" firstAttribute="centerX" secondItem="SsJ-ue-oGP" secondAttribute="centerX" id="y8r-9e-lFA" userLabel="Resume Button Aligned to Pause Button Horizontally"/>
                             <constraint firstAttribute="centerX" secondItem="KMp-SV-qnY" secondAttribute="centerX" id="zV1-4Y-KPI" userLabel="Record Button Centered Horizontally"/>
                         </constraints>
