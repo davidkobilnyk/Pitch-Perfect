@@ -14,14 +14,17 @@ final class PlaySoundsViewController: UIViewController {
     // MARK: - Properties
 
     // MARK: Public/Internal
+    /** This object contains audio file info which can be set by the calling class. */
     internal var receivedAudio: RecordedAudio?
 
     // MARK: Private
+    /** Used for replaying an audio file with varied pitch. */
     private var audioEngine: AVAudioEngine?
+    /** Used with audioEngine for playing audio with varied pitch. */
     private var audioFile: AVAudioFile?
+    /** Used for replaying an audio file with varied speed. */
     private var audioPlayer: AVAudioPlayer?
-    private var playerNode: AVAudioPlayerNode?
-    
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
@@ -29,12 +32,10 @@ final class PlaySoundsViewController: UIViewController {
 
         if let receivedAudio = self.receivedAudio {
             audioPlayer = AVAudioPlayer(contentsOfURL: receivedAudio.filePathUrl, fileTypeHint: "wav", error: nil)
-            audioPlayer!.enableRate = true
+            audioPlayer?.enableRate = true
 
             audioEngine = AVAudioEngine()
             audioFile = AVAudioFile(forReading: receivedAudio.filePathUrl, error: nil)
-            playerNode = AVAudioPlayerNode()
-            audioEngine!.attachNode(playerNode)
         } else {
             println("no audio received")
         }
@@ -84,33 +85,36 @@ final class PlaySoundsViewController: UIViewController {
         resetAudio()
 
         if let audioEngine = self.audioEngine {
+            // Initialize audioEngine with our single audio node
             let audioPlayerNode = AVAudioPlayerNode()
             audioEngine.attachNode(audioPlayerNode)
 
+            // Initialize audioEngine with a pitch modification effect
             let changePitchEffect = AVAudioUnitTimePitch()
             changePitchEffect.pitch = pitch
             audioEngine.attachNode(changePitchEffect)
 
+            // Make connections between the various components to be used with audioEngine
             audioEngine.connect(audioPlayerNode, to: changePitchEffect, format: nil)
             audioEngine.connect(changePitchEffect, to: audioEngine.outputNode, format: nil)
 
+            // Play the audio
             audioPlayerNode.scheduleFile(audioFile, atTime: nil, completionHandler: nil)
-            audioEngine.startAndReturnError(nil)
-
-            audioPlayerNode.play()
+            if audioEngine.startAndReturnError(nil) {
+                audioPlayerNode.play()
+            } else {
+                println("audio failed to play")
+            }
         } else {
             println("no audio to play")
         }
     }
 
     func resetAudio() {
-        if let audioEngine = self.audioEngine {
-            audioEngine.stop()
-            audioEngine.reset()
-        }
-        if let audioPlayer = self.audioPlayer {
-            audioPlayer.stop()
-            audioPlayer.currentTime = 0
-        }
+        audioEngine?.stop()
+        audioEngine?.reset()
+        
+        audioPlayer?.stop()
+        audioPlayer?.currentTime = 0
     }
 }
