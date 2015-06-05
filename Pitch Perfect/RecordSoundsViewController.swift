@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
+final class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     
     // MARK: - IBOutlets
 

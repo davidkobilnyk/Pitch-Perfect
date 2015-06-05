@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class PlaySoundsViewController: UIViewController {
+final class PlaySoundsViewController: UIViewController {
 
     // MARK: - Properties
 
