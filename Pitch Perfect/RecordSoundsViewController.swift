@@ -13,15 +13,25 @@ final class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegat
     
     // MARK: - IBOutlets
 
+    /** Tapped to start the recording, during which the button is disabled. */
     @IBOutlet private weak var recordButton: UIButton!
+    /** Gives the user direction or clarification regarding the recording process. */
     @IBOutlet private weak var recordingLabel: UILabel!
+    /** Visible when a recording is in process, during which it can be tapped to pause the recording. */
     @IBOutlet private weak var pauseButton: UIButton!
+    /** Visible when a recording is paused, during which it can be tapped to resume with recording. */
     @IBOutlet private weak var resumeButton: UIButton!
+    /**
+     Visible when a recording is in process, during which it can be tapped to complete the recording
+     and push the next screen for adding effects.
+    */
     @IBOutlet private weak var stopButton: UIButton!
     
     // MARK: - Private properties
-    
-    private var audioRecorder: AVAudioRecorder!
+
+    /** An object from AVFoundation used for performing all of the recording operations. */
+    private var audioRecorder: AVAudioRecorder?
+    /** A simple object for passing audio information to the next screen for replay. */
     private var recordedAudio: RecordedAudio!
     
     // MARK: - View Lifecycle
@@ -89,40 +99,58 @@ final class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegat
     
     func startRecording() {
         if let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first as? String {
+            // Determine file name for audio recording
             let currentDateTime = NSDate()
             let formatter = NSDateFormatter()
             formatter.dateFormat = "ddMMyyyy-HHmmss"
             let recordingName = formatter.stringFromDate(currentDateTime)+".wav"
 
+            // Determine file path
             let pathArray = [dirPath, recordingName]
             let filePath = NSURL.fileURLWithPathComponents(pathArray)
-            
-            let session = AVAudioSession.sharedInstance()
-            session.setCategory(AVAudioSessionCategoryPlayAndRecord, error: nil)
 
+            // Configure the audio session
+            let session = AVAudioSession.sharedInstance()
+            if !session.setCategory(AVAudioSessionCategoryPlayAndRecord, error: nil) {
+                setUIModeToInitial()
+                recordingLabel.text = "recording failed"
+                println("audio session configuration failed")
+                return
+            }
+
+            // Perform recording
             audioRecorder = AVAudioRecorder(URL: filePath, settings: nil, error: nil)
-            audioRecorder.delegate = self
-            audioRecorder.meteringEnabled = true
-            audioRecorder.prepareToRecord()
-            audioRecorder.record()
+            if let audioRecorder = self.audioRecorder {
+                audioRecorder.delegate = self
+                audioRecorder.meteringEnabled = true
+                audioRecorder.prepareToRecord()
+                audioRecorder.record()
+            } else {
+                setUIModeToInitial()
+                recordingLabel.text = "recording failed"
+            }
         } else {
+            setUIModeToInitial()
+            recordingLabel.text = "recording failed"
             println("could not save audio because document directory was not found")
         }
     }
 
     func pauseRecording() {
-        audioRecorder.pause()
+        audioRecorder?.pause()
     }
 
     func resumeRecording() {
-        audioRecorder.record()
+        audioRecorder?.record()
     }
 
     func stopRecording() {
-        audioRecorder.stop()
+        audioRecorder?.stop()
 
         let audioSession = AVAudioSession.sharedInstance()
-        audioSession.setActive(false, error: nil)
+        if audioSession.setActive(false, error: nil) {
+            println("audio session deactivation failed")
+        }
     }
 
     // MARK: - View Model
