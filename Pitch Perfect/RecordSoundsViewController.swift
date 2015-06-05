@@ -97,7 +97,7 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         let filePath = NSURL.fileURLWithPathComponents(pathArray)
         println(filePath)
         
-        var session = AVAudioSession.sharedInstance()
+        let session = AVAudioSession.sharedInstance()
         session.setCategory(AVAudioSessionCategoryPlayAndRecord, error: nil)
         // TODO: error handling?
         
@@ -118,7 +118,7 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     
     func stopRecordingAudio() {
         audioRecorder.stop()
-        var audioSession = AVAudioSession.sharedInstance()
+        let audioSession = AVAudioSession.sharedInstance()
         audioSession.setActive(false, error: nil)
         // TODO: error handling?
     }

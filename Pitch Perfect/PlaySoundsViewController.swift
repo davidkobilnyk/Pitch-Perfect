@@ -71,10 +71,10 @@ class PlaySoundsViewController: UIViewController {
     func playAudio(#pitch: Float){
         self.resetAudio()
         
-        var audioPlayerNode = AVAudioPlayerNode()
+        let audioPlayerNode = AVAudioPlayerNode()
         self.audioEngine.attachNode(audioPlayerNode)
         
-        var changePitchEffect = AVAudioUnitTimePitch()
+        let changePitchEffect = AVAudioUnitTimePitch()
         changePitchEffect.pitch = pitch
         self.audioEngine.attachNode(changePitchEffect)
         
