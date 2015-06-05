@@ -28,13 +28,13 @@ class PlaySoundsViewController: UIViewController {
         super.viewDidLoad()
 
         if let receivedAudio = self.receivedAudio {
-            self.audioPlayer = AVAudioPlayer(contentsOfURL: receivedAudio.filePathUrl, fileTypeHint: "wav", error: nil)
-            self.audioPlayer!.enableRate = true
+            audioPlayer = AVAudioPlayer(contentsOfURL: receivedAudio.filePathUrl, fileTypeHint: "wav", error: nil)
+            audioPlayer!.enableRate = true
 
-            self.audioEngine = AVAudioEngine()
-            self.audioFile = AVAudioFile(forReading: receivedAudio.filePathUrl, error: nil)
-            self.playerNode = AVAudioPlayerNode()
-            self.audioEngine!.attachNode(self.playerNode)
+            audioEngine = AVAudioEngine()
+            audioFile = AVAudioFile(forReading: receivedAudio.filePathUrl, error: nil)
+            playerNode = AVAudioPlayerNode()
+            audioEngine!.attachNode(playerNode)
         } else {
             println("no audio received")
         }
@@ -48,31 +48,31 @@ class PlaySoundsViewController: UIViewController {
     // MARK: - UI Events
 
     @IBAction func touchUpSlowButton(sender: AnyObject) {
-        self.playAudio(rate: 0.5)
+        playAudio(rate: 0.5)
     }
 
     @IBAction func touchUpFastButton(sender: UIButton) {
-        self.playAudio(rate: 2.0)
+        playAudio(rate: 2.0)
     }
 
     @IBAction func touchUpChipmunkButton(sender: UIButton) {
-        self.playAudio(pitch: 1000)
+        playAudio(pitch: 1000)
     }
 
     @IBAction func touchUpDarthVaderButton(sender: UIButton) {
-        self.playAudio(pitch: -1000)
+        playAudio(pitch: -1000)
     }
 
     @IBAction func touchUpStopButton(sender: UIButton) {
-        self.resetAudio()
+        resetAudio()
     }
 
     // MARK: - Audio Controls
     
     func playAudio(#rate: Float) {
-        self.resetAudio()
+        resetAudio()
 
-        if let audioPlayer = self.audioPlayer {
+        if let audioPlayer = audioPlayer {
             audioPlayer.rate = rate
             audioPlayer.play()
         } else {
@@ -81,7 +81,7 @@ class PlaySoundsViewController: UIViewController {
     }
 
     func playAudio(#pitch: Float){
-        self.resetAudio()
+        resetAudio()
 
         if let audioEngine = self.audioEngine {
             let audioPlayerNode = AVAudioPlayerNode()
