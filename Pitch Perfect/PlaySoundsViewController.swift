@@ -10,87 +10,104 @@ import UIKit
 import AVFoundation
 
 class PlaySoundsViewController: UIViewController {
-    
+
     // MARK: - Properties
-    
-    var audioEngine: AVAudioEngine!
-    var audioFile: AVAudioFile!
-    var audioPlayer: AVAudioPlayer!
-    var playerNode: AVAudioPlayerNode!
-    var receivedAudio: RecordedAudio!
+
+    var audioEngine: AVAudioEngine?
+    var audioFile: AVAudioFile?
+    var audioPlayer: AVAudioPlayer?
+    var playerNode: AVAudioPlayerNode?
+    var receivedAudio: RecordedAudio?
     
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.audioPlayer = AVAudioPlayer(contentsOfURL: self.receivedAudio.filePathUrl, fileTypeHint: "wav", error: nil)
-        self.audioPlayer.enableRate = true
-        
-        self.audioEngine = AVAudioEngine()
-        self.audioFile = AVAudioFile(forReading: receivedAudio.filePathUrl, error: nil)
-        self.playerNode = AVAudioPlayerNode()
-        self.audioEngine.attachNode(self.playerNode)
+        if let receivedAudio = self.receivedAudio {
+            self.audioPlayer = AVAudioPlayer(contentsOfURL: receivedAudio.filePathUrl, fileTypeHint: "wav", error: nil)
+            self.audioPlayer!.enableRate = true
+
+            self.audioEngine = AVAudioEngine()
+            self.audioFile = AVAudioFile(forReading: receivedAudio.filePathUrl, error: nil)
+            self.playerNode = AVAudioPlayerNode()
+            self.audioEngine!.attachNode(self.playerNode)
+        } else {
+            println("no audio received")
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     // MARK: - UI Events
 
     @IBAction func touchUpSlowButton(sender: AnyObject) {
         self.playAudio(rate: 0.5)
     }
-    
+
     @IBAction func touchUpFastButton(sender: UIButton) {
         self.playAudio(rate: 2.0)
     }
-    
+
     @IBAction func touchUpChipmunkButton(sender: UIButton) {
         self.playAudio(pitch: 1000)
     }
-    
+
     @IBAction func touchUpDarthVaderButton(sender: UIButton) {
         self.playAudio(pitch: -1000)
     }
-    
+
     @IBAction func touchUpStopButton(sender: UIButton) {
         self.resetAudio()
     }
-    
+
     // MARK: - Audio Controls
     
     func playAudio(#rate: Float) {
         self.resetAudio()
-        self.audioPlayer.rate = rate
-        self.audioPlayer.play()
+
+        if let audioPlayer = self.audioPlayer {
+            audioPlayer.rate = rate
+            audioPlayer.play()
+        } else {
+            println("no audio to play")
+        }
     }
-    
+
     func playAudio(#pitch: Float){
         self.resetAudio()
-        
-        let audioPlayerNode = AVAudioPlayerNode()
-        self.audioEngine.attachNode(audioPlayerNode)
-        
-        let changePitchEffect = AVAudioUnitTimePitch()
-        changePitchEffect.pitch = pitch
-        self.audioEngine.attachNode(changePitchEffect)
-        
-        self.audioEngine.connect(audioPlayerNode, to: changePitchEffect, format: nil)
-        self.audioEngine.connect(changePitchEffect, to: audioEngine.outputNode, format: nil)
-        
-        audioPlayerNode.scheduleFile(audioFile, atTime: nil, completionHandler: nil)
-        self.audioEngine.startAndReturnError(nil)
-        
-        audioPlayerNode.play()
+
+        if let audioEngine = self.audioEngine {
+            let audioPlayerNode = AVAudioPlayerNode()
+            audioEngine.attachNode(audioPlayerNode)
+
+            let changePitchEffect = AVAudioUnitTimePitch()
+            changePitchEffect.pitch = pitch
+            audioEngine.attachNode(changePitchEffect)
+
+            audioEngine.connect(audioPlayerNode, to: changePitchEffect, format: nil)
+            audioEngine.connect(changePitchEffect, to: audioEngine.outputNode, format: nil)
+
+            audioPlayerNode.scheduleFile(audioFile, atTime: nil, completionHandler: nil)
+            audioEngine.startAndReturnError(nil)
+
+            audioPlayerNode.play()
+        } else {
+            println("no audio to play")
+        }
     }
-    
+
     func resetAudio() {
-        self.audioEngine.stop()
-        self.audioEngine.reset()
-        self.audioPlayer.stop()
-        self.audioPlayer.currentTime = 0
+        if let audioEngine = self.audioEngine {
+            audioEngine.stop()
+            audioEngine.reset()
+        }
+        if let audioPlayer = self.audioPlayer {
+            audioPlayer.stop()
+            audioPlayer.currentTime = 0
+        }
     }
 }
