@@ -13,11 +13,11 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     
     // MARK: - IBOutlets
 
-    @IBOutlet weak var recordButton: UIButton!
-    @IBOutlet weak var recordingLabel: UILabel!
-    @IBOutlet weak var pauseButton: UIButton!
-    @IBOutlet weak var resumeButton: UIButton!
-    @IBOutlet weak var stopButton: UIButton!
+    @IBOutlet private weak var recordButton: UIButton!
+    @IBOutlet private weak var recordingLabel: UILabel!
+    @IBOutlet private weak var pauseButton: UIButton!
+    @IBOutlet private weak var resumeButton: UIButton!
+    @IBOutlet private weak var stopButton: UIButton!
     
     // MARK: - Private properties
     
@@ -28,7 +28,6 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
     
     override func viewWillAppear(animated: Bool) {
