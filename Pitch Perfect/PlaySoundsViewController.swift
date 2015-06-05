@@ -13,11 +13,14 @@ class PlaySoundsViewController: UIViewController {
 
     // MARK: - Properties
 
-    var audioEngine: AVAudioEngine?
-    var audioFile: AVAudioFile?
-    var audioPlayer: AVAudioPlayer?
-    var playerNode: AVAudioPlayerNode?
-    var receivedAudio: RecordedAudio?
+    // MARK: Public/Internal
+    internal var receivedAudio: RecordedAudio?
+
+    // MARK: Private
+    private var audioEngine: AVAudioEngine?
+    private var audioFile: AVAudioFile?
+    private var audioPlayer: AVAudioPlayer?
+    private var playerNode: AVAudioPlayerNode?
     
     // MARK: - View Lifecycle
 
