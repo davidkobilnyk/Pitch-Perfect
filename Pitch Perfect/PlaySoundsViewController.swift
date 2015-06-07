@@ -31,11 +31,19 @@ final class PlaySoundsViewController: UIViewController {
         super.viewDidLoad()
 
         if let receivedAudio = self.receivedAudio {
-            audioPlayer = AVAudioPlayer(contentsOfURL: receivedAudio.filePathUrl, fileTypeHint: "wav", error: nil)
-            audioPlayer?.enableRate = true
+            var error: NSError?
+            audioPlayer = AVAudioPlayer(contentsOfURL: receivedAudio.filePathUrl, fileTypeHint: "wav", error: &error)
+            if let error = error {
+                println("error initializing audio player: \(error.description)")
+            } else {
+                audioPlayer?.enableRate = true
+            }
 
             audioEngine = AVAudioEngine()
-            audioFile = AVAudioFile(forReading: receivedAudio.filePathUrl, error: nil)
+            audioFile = AVAudioFile(forReading: receivedAudio.filePathUrl, error: &error)
+            if let error = error {
+                println("error accessing audio file: \(error.description)")
+            }
         } else {
             println("no audio received")
         }
@@ -85,6 +93,7 @@ final class PlaySoundsViewController: UIViewController {
         resetAudio()
 
         if let audioEngine = self.audioEngine {
+            // Code adapted from http://stackoverflow.com/q/25333140/576101
             // Initialize audioEngine with our single audio node
             let audioPlayerNode = AVAudioPlayerNode()
             audioEngine.attachNode(audioPlayerNode)
@@ -100,10 +109,11 @@ final class PlaySoundsViewController: UIViewController {
 
             // Play the audio
             audioPlayerNode.scheduleFile(audioFile, atTime: nil, completionHandler: nil)
-            if audioEngine.startAndReturnError(nil) {
+            var error: NSError?
+            if audioEngine.startAndReturnError(&error) {
                 audioPlayerNode.play()
             } else {
-                println("audio failed to play")
+                println("audio failed to play: \(error?.description)")
             }
         } else {
             println("no audio to play")
