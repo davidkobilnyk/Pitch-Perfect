@@ -86,7 +86,7 @@ final class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegat
 
     func audioRecorderDidFinishRecording(recorder: AVAudioRecorder!, successfully flag: Bool) {
         if (!flag) {
-            recordingLabel.text = "Record Failed. Tap to Re-Attempt Record"
+            setUIModeToFailed()
             println("Recording was not successful")
             return
         }
@@ -111,27 +111,30 @@ final class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegat
 
             // Configure the audio session
             let session = AVAudioSession.sharedInstance()
-            if !session.setCategory(AVAudioSessionCategoryPlayAndRecord, error: nil) {
-                setUIModeToInitial()
-                recordingLabel.text = "recording failed"
-                println("audio session configuration failed")
+            var error: NSError?
+            if !session.setCategory(AVAudioSessionCategoryPlayAndRecord, error: &error) {
+                setUIModeToFailed()
+                println("audio session configuration failed: \(error?.description)")
                 return
             }
 
             // Perform recording
-            audioRecorder = AVAudioRecorder(URL: filePath, settings: nil, error: nil)
+            audioRecorder = AVAudioRecorder(URL: filePath, settings: nil, error: &error)
+            if let error = error {
+                setUIModeToFailed()
+                println("error preparing audio recorder: \(error.description)")
+                return
+            }
             if let audioRecorder = self.audioRecorder {
                 audioRecorder.delegate = self
                 audioRecorder.meteringEnabled = true
                 audioRecorder.prepareToRecord()
                 audioRecorder.record()
             } else {
-                setUIModeToInitial()
-                recordingLabel.text = "recording failed"
+                setUIModeToFailed()
             }
         } else {
-            setUIModeToInitial()
-            recordingLabel.text = "recording failed"
+            setUIModeToFailed()
             println("could not save audio because document directory was not found")
         }
     }
@@ -148,8 +151,10 @@ final class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegat
         audioRecorder?.stop()
 
         let audioSession = AVAudioSession.sharedInstance()
-        if audioSession.setActive(false, error: nil) {
-            println("audio session deactivation failed")
+        var error: NSError?
+        if !audioSession.setActive(false, error: &error) {
+            setUIModeToFailed()
+            println("audio session deactivation failed: \(error?.description)")
         }
     }
 
@@ -177,6 +182,14 @@ final class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegat
         pauseButton.hidden = true
         resumeButton.hidden = false
         stopButton.hidden = false
+    }
+
+    func setUIModeToFailed() {
+        recordButton.enabled = true
+        recordingLabel.text = "Record Failed. Tap to Re-Attempt Record"
+        pauseButton.hidden = true
+        resumeButton.hidden = true
+        stopButton.hidden = true
     }
 }
 
