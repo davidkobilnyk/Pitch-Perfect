@@ -5,6 +5,8 @@
 //  Created by David Kobilnyk on 5/16/15.
 //  Copyright (c) 2015 David Kobilnyk. All rights reserved.
 //
+//  Code concepts and portions adapted from Udacity course "Intro to iOS App Development with Swift"
+//
 
 import UIKit
 import AVFoundation
